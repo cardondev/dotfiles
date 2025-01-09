@@ -1,0 +1,63 @@
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+export EDITOR="vim"
+export VISUAL="vim"
+export PAGER="less"
+export LANG="en_US.UTF-8"
+export TERM="xterm-256color"
+export HISTTIMEFORMAT="%Y-%m-%d %H:%M:%S %Z  "
+export VIMINIT='let $MYVIMRC="$HOME/.cardondev_vimrc" | source $MYVIMRC'
+
+# History settings
+HISTSIZE=10000
+HISTFILESIZE=20000
+HISTCONTROL=ignoreboth:erasedups
+
+# Shell options
+shopt -s histappend
+shopt -s checkwinsize
+shopt -s cdspell
+shopt -s cmdhist
+shopt -s dotglob
+shopt -s expand_aliases
+shopt -s extglob
+shopt -s globstar
+shopt -s nocaseglob
+
+# Custom prompt
+PS1='\[\e[38;2;198;160;246m\]\D{%a %b %d, %Y %H:%M %Z}\[\e[0m\] \
+\[\e[38;2;138;173;244m\]\u\[\e[0m\]\
+\[\e[38;2;245;169;127m\]@\[\e[0m\]\
+\[\e[38;2;125;196;228m\]\h\[\e[0m\]\
+\[\e[38;2;166;218;149m\]$(if [ $EUID -eq 0 ]; then echo "\[\e[5m\] #\[\e[0m\]"; else echo "\$"; fi)\[\e[0m\]\n\
+\[\e[38;2;183;189;248m\]╔══[\[\e[0m\]\
+\[\e[38;2;145;215;227m\]\w\[\e[0m\]\
+\[\e[38;2;183;189;248m\]]═════\[\e[0m\]\n\
+\[\e[38;2;238;212;159m\]╚═\[\e[0m\]\
+\[\e[38;2;245;169;127m\]⟫\[\e[0m\] '
+
+
+# Source aliases and functions
+if [ -f ~/.cardondev_aliases ]; then
+    . ~/.cardondev_aliases
+fi
+
+if [ -f ~/.cardondev_functions ]; then
+    . ~/.cardondev_functions
+fi
+
+# Command separator
+PROMPT_COMMAND="command_separator"
+
+# Turbo Mode Car
+turbo_mode
+
+# Welcome message
+welcome
+
+echo -e "\033[0;32mWelcome to the Matrix\033[0m"
+
