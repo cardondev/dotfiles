@@ -1,0 +1,516 @@
+#!/usr/bin/env zsh
+# ═══════════════════════════════════════════════════════════════════════════
+#                                                                           
+#                      CARDONDEV STANDARD ZSHRC         
+#                                                                           
+#                   Designed for Visual Excellence                   
+#                                                                          
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                            THEME COLORS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Catppuccin Mocha Palette
+export ROSEWATER=$'\e[38;2;245;224;220m'
+export FLAMINGO=$'\e[38;2;242;205;205m'
+export PINK=$'\e[38;2;245;194;231m'
+export MAUVE=$'\e[38;2;203;166;247m'
+export RED=$'\e[38;2;243;139;168m'
+export MAROON=$'\e[38;2;235;160;172m'
+export PEACH=$'\e[38;2;250;179;135m'
+export YELLOW=$'\e[38;2;249;226;175m'
+export GREEN=$'\e[38;2;166;227;161m'
+export TEAL=$'\e[38;2;148;226;213m'
+export SKY=$'\e[38;2;137;220;235m'
+export SAPPHIRE=$'\e[38;2;116;199;236m'
+export BLUE=$'\e[38;2;137;180;250m'
+export LAVENDER=$'\e[38;2;180;190;254m'
+export TEXT=$'\e[38;2;205;214;244m'
+export SUBTEXT1=$'\e[38;2;186;194;222m'
+export SUBTEXT0=$'\e[38;2;166;173;200m'
+export OVERLAY2=$'\e[38;2;147;153;178m'
+export OVERLAY1=$'\e[38;2;127;132;156m'
+export OVERLAY0=$'\e[38;2;108;112;134m'
+export SURFACE2=$'\e[38;2;88;91;112m'
+export SURFACE1=$'\e[38;2;69;71;90m'
+export SURFACE0=$'\e[38;2;49;50;68m'
+export BASE=$'\e[38;2;30;30;46m'
+export MANTLE=$'\e[38;2;24;24;37m'
+export CRUST=$'\e[38;2;17;17;27m'
+export RESET=$'\e[0m'
+export BOLD=$'\e[1m'
+export DIM=$'\e[2m'
+export ITALIC=$'\e[3m'
+export UNDERLINE=$'\e[4m'
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                            ZSH CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Enable colors and change prompt
+autoload -U colors && colors
+setopt PROMPT_SUBST
+
+# History configuration
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_VERIFY
+
+# Completion system
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           PLUGIN MANAGEMENT
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Auto-install zinit if not present
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+
+# Load plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+zinit light Aloxaf/fzf-tab
+
+# Configure plugin colors for Catppuccin
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#585b70"
+ZSH_HIGHLIGHT_STYLES[default]="fg=#cdd6f4"
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=#f38ba8,bold"
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=#cba6f7"
+ZSH_HIGHLIGHT_STYLES[alias]="fg=#a6e3a1"
+ZSH_HIGHLIGHT_STYLES[suffix-alias]="fg=#a6e3a1"
+ZSH_HIGHLIGHT_STYLES[global-alias]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=#89b4fa"
+ZSH_HIGHLIGHT_STYLES[function]="fg=#89dceb"
+ZSH_HIGHLIGHT_STYLES[command]="fg=#a6e3a1"
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=#a6e3a1,italic"
+ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=#fab387"
+ZSH_HIGHLIGHT_STYLES[hashed-command]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[path]="fg=#f9e2af,underline"
+ZSH_HIGHLIGHT_STYLES[path_prefix]="fg=#bac2de,underline"
+ZSH_HIGHLIGHT_STYLES[globbing]="fg=#fab387"
+ZSH_HIGHLIGHT_STYLES[history-expansion]="fg=#f5c2e7"
+ZSH_HIGHLIGHT_STYLES[command-substitution]="fg=#f5c2e7"
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=#eba0ac"
+ZSH_HIGHLIGHT_STYLES[process-substitution]="fg=#f5c2e7"
+ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]="fg=#eba0ac"
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument]="fg=#cba6f7"
+ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]="fg=#f38ba8"
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=#f9e2af"
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=#f9e2af"
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=#f9e2af"
+ZSH_HIGHLIGHT_STYLES[rc-quote]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=#94e2d5"
+ZSH_HIGHLIGHT_STYLES[assign]="fg=#cdd6f4"
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=#cdd6f4,bold"
+ZSH_HIGHLIGHT_STYLES[comment]="fg=#6c7086,italic"
+ZSH_HIGHLIGHT_STYLES[named-fd]="fg=#cdd6f4"
+ZSH_HIGHLIGHT_STYLES[numeric-fd]="fg=#cdd6f4"
+ZSH_HIGHLIGHT_STYLES[arg0]="fg=#cdd6f4"
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           PROMPT FUNCTIONS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Git branch detection 
+git_branch() {
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+    if [[ -n $branch ]]; then
+        local git_status=""
+        local staged=$(git diff --cached --numstat 2>/dev/null | wc -l | tr -d ' ')
+        local unstaged=$(git diff --numstat 2>/dev/null | wc -l | tr -d ' ')
+        local untracked=$(git ls-files --others --exclude-standard 2>/dev/null | wc -l | tr -d ' ')
+        
+        if [[ $staged -gt 0 ]]; then
+            git_status="${git_status}${GREEN}●${RESET}"
+        fi
+        if [[ $unstaged -gt 0 ]]; then
+            git_status="${git_status}${YELLOW}●${RESET}"
+        fi
+        if [[ $untracked -gt 0 ]]; then
+            git_status="${git_status}${RED}●${RESET}"
+        fi
+        
+        echo " ${PINK} ${MAUVE}${branch}${RESET}${git_status}"
+    fi
+}
+
+# Python virtual environment
+python_venv() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        echo " ${YELLOW}󰌠 ${PEACH}${VIRTUAL_ENV:t}${RESET}"
+    fi
+}
+
+# Node version
+node_version() {
+    if command -v node &>/dev/null && [[ -f "package.json" ]]; then
+        local version=$(node -v 2>/dev/null)
+        echo " ${GREEN}󰎙 ${TEAL}${version}${RESET}"
+    fi
+}
+
+# Docker status
+docker_status() {
+    if command -v docker &>/dev/null && docker info &>/dev/null; then
+        local containers=$(docker ps -q 2>/dev/null | wc -l | tr -d ' ')
+        if [[ $containers -gt 0 ]]; then
+            echo " ${BLUE} ${SAPPHIRE}${containers}${RESET}"
+        fi
+    fi
+}
+
+# Exit status with icon
+exit_status() {
+    local last_exit=$?
+    if [[ $last_exit -eq 0 ]]; then
+        echo "${GREEN}✓${RESET}"
+    else
+        echo "${RED}✗ ${last_exit}${RESET}"
+    fi
+}
+
+# Command execution time
+preexec() {
+    timer=$(date +%s)
+}
+
+# Command separator and execution time
+precmd() {
+    if [ -n "$FIRST_PROMPT" ]; then
+        # Single line with bright gradient pastel green
+        echo ""
+        echo "${TEAL}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=-=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${GREEN}=-=-=${GREEN}-=-=-${TEAL}=-=-=${RESET}"
+        echo ""
+    else
+        FIRST_PROMPT=1
+    fi
+    
+    if [ $timer ]; then
+        now=$(date +%s)
+        elapsed=$((now-timer))
+        
+        if [ $elapsed -gt 3 ]; then
+            export RPS1="${SURFACE2}󱦟 ${elapsed}s${RESET}"
+        else
+            export RPS1=""
+        fi
+        unset timer
+    fi
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           PROMPT
+# ═══════════════════════════════════════════════════════════════════════════
+
+setopt PROMPT_SUBST
+
+# Gradient line with fade effect (thicker) - Catppuccin Frappe pastel
+prompt_gradient_line() {
+    echo "${SURFACE1}╭${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━${MAUVE}━━━━━━━━━━━━━━━${SAPPHIRE}━━━━━━━━━━━━━━━${SKY}━━━━━━━━━━━━━━━${TEAL}━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╮${RESET}"
+}
+
+# Date/time and user line combined (no right pipe)
+prompt_info_line() {
+    local datetime=$(date '+%H:%M:%S')
+    local date=$(date '+%a %b %d')
+    local user_tag
+    if [[ $EUID -eq 0 ]]; then
+        user_tag="${RED}${BOLD}root${RESET}"
+    else
+        user_tag="${GREEN}%n${RESET}"
+    fi
+    echo " ${YELLOW}󰥔${RESET} ${LAVENDER}${datetime}${RESET} ${SURFACE2}•${RESET} ${BLUE}${date}${RESET}  ${GREEN}󰀄${RESET} ${user_tag}${PEACH}@${RESET}${SKY}%m${RESET}"
+}
+
+# Directory line with git and integration
+prompt_dir_line() {
+    local git_info=$(git_branch)
+    local venv_info=$(python_venv)
+    local node_info=$(node_version)
+    local docker_info=$(docker_status)
+    echo " ${YELLOW}󰉋${RESET} ${TEAL}%~${RESET}${git_info}${venv_info}${node_info}${docker_info}"
+}
+
+# Bottom gradient line
+prompt_bottom_gradient() {
+    echo "${SURFACE1}╰${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━${MAUVE}━━━━━━━━━━━━━━━${SAPPHIRE}━━━━━━━━━━━━━━━${SKY}━━━━━━━━━━━━━━━${TEAL}━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╯${RESET}"
+}
+
+# Main prompt
+PROMPT='
+$(prompt_gradient_line)
+$(prompt_info_line)
+$(prompt_dir_line)
+$(prompt_bottom_gradient)
+${FLAMINGO}❯${PEACH}❯${RED}❯${RESET} '
+
+# Right prompt shows exit status
+RPROMPT='$(exit_status)'
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                             ALIASES
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Enable color support
+export CLICOLOR=1
+export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd
+
+# ls aliases with icons
+alias ls='ls -G'
+alias ll='echo "${BLUE}📁 Detailed listing:${RESET}" && ls -lah'
+alias la='echo "${GREEN}👁️  All files:${RESET}" && ls -A'
+alias l='echo "${YELLOW}📄 Simple list:${RESET}" && ls -CF'
+alias lt='echo "${MAUVE}🌲 Tree view:${RESET}" && ls -lahR'
+
+# Navigation with style
+alias ..='echo "${TEAL}⬆️  Going up...${RESET}" && cd ..'
+alias ...='echo "${TEAL}⬆️  Going up 2x...${RESET}" && cd ../..'
+alias ....='echo "${TEAL}⬆️  Going up 3x...${RESET}" && cd ../../..'
+alias ~='echo "${PINK}🏠 Going home...${RESET}" && cd ~'
+
+# Git aliases with colors
+alias gs='echo "${MAUVE}📊 Git status:${RESET}" && git status'
+alias ga='echo "${GREEN}➕ Git add:${RESET}" && git add'
+alias gc='echo "${BLUE}💾 Git commit:${RESET}" && git commit'
+alias gp='echo "${PEACH}📤 Git push:${RESET}" && git push'
+alias gl='echo "${YELLOW}📜 Git log:${RESET}" && git log --oneline --graph --color --all --decorate'
+alias gd='echo "${RED}🔍 Git diff:${RESET}" && git diff --color'
+alias gb='echo "${SAPPHIRE}🌿 Git branches:${RESET}" && git branch -a'
+
+# System aliases
+alias reload='echo "${GREEN}🔄 Reloading shell...${RESET}" && source ~/.zshrc'
+alias zshconfig='echo "${BLUE}⚙️  Opening zsh config...${RESET}" && ${EDITOR:-vim} ~/.zshrc'
+alias update='echo "${YELLOW}📦 Updating Homebrew...${RESET}" && brew update && brew upgrade'
+alias cleanup='echo "${RED}🧹 Cleaning up...${RESET}" && brew cleanup && brew doctor'
+
+# Process management
+alias top='echo "${LAVENDER}📊 System monitor:${RESET}" && htop || top'
+alias ports='echo "${SKY}🔌 Active ports:${RESET}" && netstat -tulanp'
+alias myip='echo "${TEAL}🌐 Your IP:${RESET}" && curl -s https://api.ipify.org && echo'
+
+# Docker aliases
+alias dps='echo "${BLUE}🐳 Docker containers:${RESET}" && docker ps'
+alias dpsa='echo "${BLUE}🐳 All Docker containers:${RESET}" && docker ps -a'
+alias dimg='echo "${SAPPHIRE}📦 Docker images:${RESET}" && docker images'
+alias dclean='echo "${RED}🧹 Docker cleanup:${RESET}" && docker system prune -af'
+
+# Python aliases
+alias py='echo "${YELLOW}🐍 Python:${RESET}" && python3'
+alias pip='echo "${PEACH}📦 Pip:${RESET}" && pip3'
+alias venv='echo "${GREEN}🔮 Creating venv...${RESET}" && python3 -m venv venv'
+alias activate='echo "${MAUVE}⚡ Activating venv...${RESET}" && source venv/bin/activate'
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           USEFUL FUNCTIONS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Colorful directory creation and navigation
+mkcd() {
+    echo "${GREEN}📁 Creating and entering: ${YELLOW}$1${RESET}"
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract any archive with style
+extract() {
+    if [ -f "$1" ]; then
+        echo "${BLUE}📦 Extracting: ${YELLOW}$1${RESET}"
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar e "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "${RED}❌ Unknown archive format${RESET}" ;;
+        esac
+        echo "${GREEN}✅ Extraction complete!${RESET}"
+    else
+        echo "${RED}❌ '$1' is not a valid file${RESET}"
+    fi
+}
+
+# Weather with style
+weather() {
+    local location="${1:-New York}"
+    echo "${SKY}🌤️  Weather for ${YELLOW}${location}:${RESET}"
+    curl -s "wttr.in/${location}?format=3"
+}
+
+# System info dashboard
+sysinfo() {
+    echo ""
+    echo "${SURFACE1}╭${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╮${RESET}"
+    echo "                    ${MAUVE}${BOLD}💻 SYSTEM INFORMATION${RESET}"
+    echo "${SURFACE1}├${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}┤${RESET}"
+    echo " ${GREEN}󰌢${RESET}  Hostname:     ${TEXT}$(hostname)${RESET}"
+    echo " ${YELLOW}󰀄${RESET}  User:         ${TEXT}$(whoami)${RESET}"
+    echo " ${SAPPHIRE}${RESET}  macOS:        ${TEXT}$(sw_vers -productVersion)${RESET}"
+    echo " ${PEACH}${RESET}  Kernel:       ${TEXT}$(uname -r)${RESET}"
+    echo " ${TEAL}󰍛${RESET}  CPU:          ${TEXT}$(sysctl -n machdep.cpu.brand_string | cut -c1-40)${RESET}"
+    echo " ${PINK}󰑭${RESET}  Memory:       ${TEXT}$(vm_stat | grep 'Pages free' | awk '{print $3}') pages free${RESET}"
+    echo " ${LAVENDER}󰋊${RESET}  Disk:         ${TEXT}$(df -h / | awk 'NR==2 {print $4}') available${RESET}"
+    echo " ${MAROON}󰥔${RESET}  Uptime:       ${TEXT}$(uptime | sed 's/.*up //' | sed 's/,.*//')${RESET}"
+    echo "${SURFACE1}╰${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╯${RESET}"
+    echo ""
+}
+
+# Quick git commit with message
+gcm() {
+    if [ -z "$1" ]; then
+        echo "${RED}❌ Please provide a commit message${RESET}"
+        return 1
+    fi
+    echo "${GREEN}📝 Committing with message: ${YELLOW}$1${RESET}"
+    git add -A && git commit -m "$1"
+    echo "${GREEN}✅ Committed successfully!${RESET}"
+}
+
+# Search history with fzf
+h() {
+    echo "${LAVENDER}🔍 Searching history...${RESET}"
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+}
+
+# Colorful directory tree
+tree() {
+    echo "${GREEN}🌲 Directory tree:${RESET}"
+    command tree -C "$@" | less -R
+}
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           ENVIRONMENT SETUP
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Path configuration
+export PATH="/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+
+# Editor
+export EDITOR="vim"
+export VISUAL="vim"
+
+# Language
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
+# FZF configuration with Catppuccin colors
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
+# Homebrew
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Node Version Manager
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                            WELCOME MESSAGE
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Display welcome message with gradient effect
+clear
+echo ""
+echo "${SURFACE1}╭${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${MAUVE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SAPPHIRE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╮${RESET}"
+echo "                  ${MAUVE}${BOLD}✨ Welcome CardonDev ✨${RESET}"
+echo ""
+echo "         ${GREEN}󰀄${RESET} ${SAPPHIRE}$(whoami)${RESET}${PEACH}@${RESET}${SKY}$(hostname -s)${RESET}  ${SURFACE2}•${RESET}  ${YELLOW}󰥔${RESET} ${LAVENDER}$(date '+%H:%M')${RESET}  ${SURFACE2}•${RESET}  ${TEAL}󰇄${RESET} ${PEACH}$(date '+%b %d, %Y')${RESET}"
+echo "${SURFACE1}╰${OVERLAY0}━${OVERLAY1}━${OVERLAY2}━${SUBTEXT0}━${SUBTEXT1}━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${PINK}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${MAUVE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SAPPHIRE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${LAVENDER}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${SUBTEXT1}━${SUBTEXT0}━${OVERLAY2}━${OVERLAY1}━${OVERLAY0}━${SURFACE1}╯${RESET}"
+echo ""
+echo "${SURFACE2}${DIM}Type ${YELLOW}'sysinfo'${SURFACE2} for system details  •  ${PINK}'reload'${SURFACE2} to refresh shell${RESET}"
+echo ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                           PERFORMANCE TWEAKS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Disable auto-correct
+unsetopt correct_all
+
+# Enable menu selection
+zmodload zsh/complist
+
+# Use vim keys in tab complete menu
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+# Arrow key bindings for history navigation
+bindkey '^[[A' up-line-or-history          # Arrow up
+bindkey '^[[B' down-line-or-history        # Arrow down
+bindkey '^[[C' forward-char                # Arrow right
+bindkey '^[[D' backward-char               # Arrow left
+bindkey '^[OA' up-line-or-history          # Arrow up (alternate)
+bindkey '^[OB' down-line-or-history        # Arrow down (alternate)
+bindkey '^[OC' forward-char                # Arrow right (alternate)
+bindkey '^[OD' backward-char               # Arrow left (alternate)
+
+# Better history search with partial matching
+autoload -U history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey '^P' history-beginning-search-backward-end
+bindkey '^N' history-beginning-search-forward-end
+
+# Home and End keys
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line
+
+# Edit command in vim
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
+# Quick directory jumping
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+
+# ═══════════════════════════════════════════════════════════════════════════
+#                            END OF CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Load local configuration if exists
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
